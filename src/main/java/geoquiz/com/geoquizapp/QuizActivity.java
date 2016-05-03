@@ -1,5 +1,6 @@
 package geoquiz.com.geoquizapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,10 +14,12 @@ public class QuizActivity extends AppCompatActivity {
 
     private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX = "index";
+    public static final String EXTRA_ANSWER = "geoquiz.com.geoquizapp.answer";
     private Button mTrueButton;
     private Button mFalseButton;
     private Button mNextButton;
     private Button mPrevButton;
+    private Button mCheatButton;
     private TextView mQuestionTextView;
     private static TrueFalse [] mQuestions;
     private int mCurrentIndex = 0;
@@ -89,6 +92,19 @@ public class QuizActivity extends AppCompatActivity {
                 if(mCurrentIndex < 0)
                     mCurrentIndex = mQuestions.length - 1;
                 updateQuestion();
+            }
+        });
+
+        mCheatButton = ((Button) findViewById(R.id.cheat_button));
+        mCheatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //starting a new activity i.e CheatActivity
+                final Intent intent = new Intent(QuizActivity.this, CheatActivity.class);
+                //explicitly passing answer to cheat activity
+                intent.putExtra(EXTRA_ANSWER, mQuestions[mCurrentIndex].isTrueQuestion());
+                //expecting a feedback/result
+                startActivityForResult(intent, 0);
             }
         });
     }
